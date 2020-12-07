@@ -10,8 +10,10 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "expo-constants": "^9.2.0",
     "react": "16.13.1",
-    "react-native": "0.63.4"
+    "react-native": "0.63.4",
+    "react-native-paper": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

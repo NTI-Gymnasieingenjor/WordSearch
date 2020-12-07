@@ -6,109 +6,90 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import * as React from 'react';
+import {Text, View, StyleSheet, Button} from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+function LetterBox(letter, setFoundLetters, foundLetters) {
+  let [selected, setSelected] = React.useState(false);
 
-const App: () => React$Node = () => {
+  let click = (letter) => {
+    console.log('click: ', letter);
+    setSelected(!selected);
+    setFoundLetters([...foundLetters, letter]);
+  };
+
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <Button
+      title={letter}
+      onPress={() => click(letter)}
+      color={
+        selected
+          ? styles.charSelect.backgroundColor
+          : styles.char.backgroundColor
+      }>
+      <Text>{letter}</Text>
+    </Button>
   );
-};
+}
+
+function LetterRow(letterList, setFoundLetters, foundLetters) {
+  return (
+    <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+      {letterList.map((letter) =>
+        LetterBox(letter, setFoundLetters, foundLetters),
+      )}
+    </View>
+  );
+}
+
+let word = 'CAT';
+let wordSearch = [
+  ['C', 'O', 'Z'],
+  ['S', 'A', 'Y'],
+  ['Q', 'G', 'T'],
+];
+
+export default function App() {
+  let [foundLetters, setFoundLetters] = React.useState([]);
+  console.log(foundLetters);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.paragraph}>{word}</Text>
+      <View>
+        {wordSearch.map((row) => LetterRow(row, setFoundLetters, foundLetters))}
+      </View>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#ecf0f1',
+    padding: 8,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
+  paragraph: {
+    margin: 24,
     fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
-  highlight: {
-    fontWeight: '700',
+  char: {
+    margin: 8,
+    padding: 24,
+    fontSize: 18,
+    backgroundColor: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  charSelect: {
+    margin: 8,
+    padding: 24,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    backgroundColor: 'lightblue',
   },
 });
-
-export default App;
