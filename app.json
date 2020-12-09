@@ -1,4 +1,5 @@
 {
-  "name": "WordSearch",
-  "displayName": "WordSearch"
+  "expo": {
+    "name": "WordSearch"
+  }
 }
