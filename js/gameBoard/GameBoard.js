@@ -14,7 +14,7 @@ import Word from '../word/Word';
 const letters = [
   [new Word('H', 69), new Word('e', 69), new Word('j', 69)],
   [new Word('c', 420), new Word('a', 420), new Word('y', 420)],
-  [new Word('K', 96), new Word('o', 96), new Word('r', 96)],
+  [new Word('t', 96), new Word('j', 96), new Word('a', 96)],
 ];
 
 export default function GameBoard() {
