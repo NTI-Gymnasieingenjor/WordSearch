@@ -29,7 +29,10 @@ export default function App() {
   let [done, setDone] = React.useState(false);
   return (
     <View style={styles.container}>
-      <Text style={styles.paragraph}>{word.word.toLowerCase()}</Text>
+      <Text style={styles.paragraph}>
+        {word.word.toLowerCase().charAt(0).toUpperCase() +
+          word.word.toLowerCase().slice(1)}
+      </Text>
       <GameBoard done={done} setDone={setDone} word={word} letters={letters} />
       {done ? (
         <TouchableOpacity
