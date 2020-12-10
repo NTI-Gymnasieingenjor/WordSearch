@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -11,27 +12,56 @@ import {View, Text} from 'react-native';
 import styles from './gameBoardStyle';
 import Word from '../word/Word';
 
-const letters = [
-  [new Word('H', 69), new Word('e', 69), new Word('j', 69)],
-  [new Word('c', 420), new Word('a', 420), new Word('y', 420)],
-  [new Word('t', 96), new Word('j', 96), new Word('a', 96)],
-];
+let letters;
+let word;
 
-export default function GameBoard() {
-  function renderRow(letterGroup) {
+export default function GameBoard(props) {
+  letters = props.letters;
+  word = props.word;
+  let [selectedList, setSelectedList] = React.useState([]);
+  let [selectedColor, setSelectedColor] = React.useState('lightblue');
+  function renderRow(
+    letterGroup,
+    selectedList,
+    setSelectedList,
+    selectedColor,
+    setSelectedColor,
+    done,
+    setDone,
+  ) {
     return (
-      <View style={styles.row}>
-        <GameTile letters={letterGroup[0]} />
-        <GameTile letters={letterGroup[1]} />
-        <GameTile letters={letterGroup[2]} />
+      <View
+        style={styles.row}
+        key={letterGroup.map((letter) => letter.word).join('')}>
+        {letterGroup.map((letter) => (
+          <GameTile
+            className={letterGroup}
+            key={letter.id + ':' + letter.word}
+            letters={letter}
+            selectedList={selectedList}
+            setSelectedList={setSelectedList}
+            selectedColor={selectedColor}
+            setSelectedColor={setSelectedColor}
+            done={done}
+            setDone={setDone}
+          />
+        ))}
       </View>
     );
   }
   return (
     <View style={styles.board}>
-      {letters.map((letterGroup) => {
-        return renderRow(letterGroup);
-      })}
+      {letters.map((letterGroup) =>
+        renderRow(
+          letterGroup,
+          selectedList,
+          setSelectedList,
+          selectedColor,
+          setSelectedColor,
+          props.done,
+          props.setDone,
+        ),
+      )}
     </View>
   );
 }
@@ -41,11 +71,36 @@ export function GameTile(props) {
   return (
     <View
       onStartShouldSetResponder={() => {
+        /**@type {Array} */
+        let lettersList = props.selectedList;
+        if (!selected === true) {
+          lettersList = [...props.selectedList, props.letters.word];
+        } else {
+          lettersList.splice(lettersList.indexOf(props.letters.word), 1);
+          props.setSelectedColor('lightblue');
+        }
+
+        if (lettersList.length > 3) {
+          return;
+        }
+        props.setDone(false);
+        let try_word = lettersList.sort().join('');
+        if (lettersList.length === 3) {
+          if (try_word === word.sortedWord) {
+            props.setDone(true);
+            alert('GRATTIS!!!');
+          }
+          props.setSelectedColor(
+            try_word === word.sortedWord ? 'green' : 'red',
+          );
+        }
+
         setSelected(!selected);
+        props.setSelectedList(lettersList);
       }}
       style={[
         styles.tile,
-        {backgroundColor: !selected ? 'white' : 'lightblue'},
+        {backgroundColor: !selected ? 'white' : props.selectedColor},
       ]}>
       <Text style={styles.text}>
         {props.letters === undefined ? '' : props.letters.word.toUpperCase()}
